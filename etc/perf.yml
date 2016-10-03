@@ -172,10 +172,11 @@ functions:
           # `reports_analysis: true` as a var to this function. The following line will select the
           # appropriate flags if it's `true`.
           reports_analysis_flags="--reports-analysis . --perf-file perf/perf.json"
-          cmd_flags=$([ "${reports_analysis}" = "true" ] && echo "$reports_analysis_flags" || echo "")
+          report_flags=$([ "${reports_analysis}" = "true" ] && echo "$reports_analysis_flags" || echo "")
+          patch_flag=$([ "${is_patch}" = "true" ] && echo "--is-patch" || echo "")
           REFTAG="3.2.9-Baseline"
           OVERRIDE="../dsi/analysis/master/perf_override.json" # Note use of master here cannot use ${project}
-          python ../dsi/analysis/perf_regression_check.py $cmd_flags -f history.json --rev ${revision} -t tags.json --refTag $REFTAG --overrideFile $OVERRIDE --variant ${build_variant} --threshold 0.10 --threadThreshold 0.15
+          python ../dsi/analysis/perf_regression_check.py $patch_flag $report_flags -f history.json --rev ${revision} -t tags.json --refTag $REFTAG --overrideFile $OVERRIDE --variant ${build_variant} --threshold 0.10 --threadThreshold 0.15
   "run perf tests":
     - command: shell.exec
       params:
